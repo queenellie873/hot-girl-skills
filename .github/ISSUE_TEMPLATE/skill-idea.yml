@@ -1,0 +1,25 @@
+name: skill idea
+description: suggest a skill someone could build
+title: "skill idea: "
+labels: ["skill idea"]
+body:
+  - type: textarea
+    id: what
+    attributes:
+      label: what should the skill do?
+      placeholder: "e.g. write a PR description from my diff"
+    validations:
+      required: true
+  - type: textarea
+    id: when
+    attributes:
+      label: when should the agent use it?
+      placeholder: "e.g. when i say 'open a PR' or 'write the PR description'"
+  - type: dropdown
+    id: build
+    attributes:
+      label: do u want to build it?
+      options:
+        - "yes, i'll build it"
+        - "i'd love help"
+        - "no, up for grabs"

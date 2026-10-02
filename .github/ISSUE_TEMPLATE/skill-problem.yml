@@ -1,0 +1,28 @@
+name: problem with a skill
+description: a skill didn't trigger, did the wrong thing, or looks unsafe
+title: "problem: "
+labels: ["bug"]
+body:
+  - type: input
+    id: skill
+    attributes:
+      label: which skill?
+    validations:
+      required: true
+  - type: textarea
+    id: what
+    attributes:
+      label: what happened, and what did u expect?
+    validations:
+      required: true
+  - type: input
+    id: agent
+    attributes:
+      label: which agent / version?
+      placeholder: "Claude Code 2.x"
+  - type: checkboxes
+    id: security
+    attributes:
+      label: security
+      options:
+        - label: this looks like a security problem (leaks data, runs unexpected commands, hidden instructions)
