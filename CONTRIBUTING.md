@@ -56,7 +56,7 @@ then open a pull request and fill in the checklist.
 
 ## how review works
 
-skills are instructions agents will follow, sometimes with real permissions on someone's machine. so a human reads every PR before it's merged. for now that's [@queenellie873](https://github.com/queenellie873): she reviews and merges every PR.
+skills are instructions agents will follow, sometimes with real permissions on someone's machine. so a human reads every PR before it's merged. for now, [@queenellie873](https://github.com/queenellie873) reviews and merges every PR.
 
 **fast lane: text-only skills.** just a `SKILL.md` (and maybe other markdown). these can get merged the same day, even live at an event.
 
