@@ -27,7 +27,7 @@ new to Claude Code? start with the [Claude Code onboarding guide](https://claude
 | skill | what it does |
 |---|---|
 | [agent-orchestrator](skills/agent-orchestrator/) | turns one agent into the lead of a small agent team: writes a brief for each worker, keeps a `STATE.md` state log, checks in, and asks u before anything risky |
-| [agent-messaging](skills/agent-messaging/) | a simple protocol for agents to message each other (cmux, tmux, subagents or a plain inbox file), so handoffs stay readable and safe |
+| [agent-messaging](skills/agent-messaging/) | a simple protocol for agents to message each other with SendMessage (no typing into each other's tabs), so handoffs stay readable and safe |
 | [code-explainer-but-i-have-adhd](skills/code-explainer-but-i-have-adhd/) | explains code in small chunks: tl;dr first, one thing at a time, and a clear next step |
 
 more in [`prompts/`](prompts/) (example `CLAUDE.md` files) and [`teams/`](teams/) (agent team setups).

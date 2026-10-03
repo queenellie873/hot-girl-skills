@@ -16,10 +16,10 @@ Constraints: <budget, tools, anything off-limits>
 
 ## Agents
 
-| name | surface/id | brief | status file | status | last update |
-|------|------------|-------|-------------|--------|-------------|
-| lead | <e.g. cmux surface:1> | this file | this file | working | YYYY-MM-DD HH:MM |
-| <name> | <e.g. cmux surface:2, tmux work:1, subagent, this session> | [<NAME>-BRIEF.md](<NAME>-BRIEF.md) | work/<name>/STATUS.md | not started | YYYY-MM-DD HH:MM |
+| name | address | surface/id | brief | status file | status | last update |
+|------|---------|------------|-------|-------------|--------|-------------|
+| lead | <your ListAgents address> | <e.g. cmux surface:1> | this file | this file | working | YYYY-MM-DD HH:MM |
+| <name> | <from its first message, or -> | <e.g. cmux surface:2, tmux work:1, subagent, this session> | [<NAME>-BRIEF.md](<NAME>-BRIEF.md) | work/<name>/STATUS.md | not started | YYYY-MM-DD HH:MM |
 
 <!-- status: not started | waiting on human | working | blocked | done -->
 
