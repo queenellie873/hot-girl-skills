@@ -89,7 +89,7 @@ reply: type status to lead via SendMessage to <lead address> when you have start
 
 Send it as agent-messaging's one-line wire form (parts joined with ` || `), never as several lines.
 
-If agent-messaging is not installed, fall back: write the message at the bottom of the worker's brief (under `## Messages from lead`) or append it to `.agents/inbox/<name>.md`, and tell the human exactly what to paste into which tab.
+If agent-messaging is not installed, still send with SendMessage when you have it. Otherwise fall back: write the message at the bottom of the worker's brief (under `## Messages from lead`) or append it to `.agents/inbox/<name>.md`, and tell the human exactly what to paste into which tab.
 
 Starting workers, by surface:
 - **Tabs**: always open each worker as a **new tab in the same workspace as you**, never a new workspace or window, so the human sees the whole team in one place. Start it at the project root with the brief as its first prompt, name the tab after the worker, and record its surface id in Agents. cmux is the right tool for opening, naming and reading tabs; messages go through SendMessage. Never start workers with flags that skip permission prompts.

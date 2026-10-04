@@ -75,7 +75,7 @@ Use the first one that reaches the recipient:
 
 | # | Transport | When | Send |
 |---|-----------|------|------|
-| a | SendMessage | recipient is a Claude Code session on this machine, or a subagent | SendMessage tool, `to: <address>` |
+| a | SendMessage | recipient is any Claude Code session on this machine (separate sessions too, not just subagents), or a subagent | SendMessage tool, `to: <address>`; add `notify_when_idle: true` to hear once when it finishes |
 | b | File inbox | recipient can't receive SendMessage | append to `.agents/inbox/<agent>.md` |
 | c | cmux | backup only: recipient is a terminal that can't be reached any other way | `cmux send --surface <ref> "<one line>"` then `cmux send-key --surface <ref> enter` |
 | d | tmux | backup only, same as cmux | `tmux send-keys -t <target> -l "<one line>"` then `tmux send-keys -t <target> Enter` |
