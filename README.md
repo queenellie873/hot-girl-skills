@@ -28,6 +28,7 @@ new to Claude Code? start with the [Claude Code onboarding guide](https://claude
 |---|---|
 | [agent-orchestrator](skills/agent-orchestrator/) | turns one agent into the lead of a small agent team: writes a brief for each worker, keeps a `STATE.md` state log, checks in, and asks u before anything risky |
 | [agent-messaging](skills/agent-messaging/) | a simple protocol for agents to message each other (cmux, tmux, subagents or a plain inbox file), so handoffs stay readable and safe |
+| [cold-outreach-for-jobs](skills/cold-outreach-for-jobs/) | writes a cold DM or email to someone at a company u want to work at: 2-4 sentences, one specific question, something small of value, and u apply first. based on [Diego Zaks' post](https://www.linkedin.com/posts/diegozaks_ive-received-countless-terrible-cold-outreach-share-7188176913150935040-ciC1/) |
 | [code-explainer-but-i-have-adhd](skills/code-explainer-but-i-have-adhd/) | explains code in small chunks: tl;dr first, one thing at a time, and a clear next step |
 
 more in [`prompts/`](prompts/) (example `CLAUDE.md` files) and [`teams/`](teams/) (agent team setups).
