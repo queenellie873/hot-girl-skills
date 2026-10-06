@@ -17,7 +17,6 @@ jobs:
     if: github.event.pull_request.merged == true && github.event.pull_request.user.type != 'Bot'
     runs-on: ubuntu-latest
     steps:
-      # base branch only. never check out or run the PR's code here.
       - uses: actions/checkout@v4
         with:
           ref: ${{ github.event.pull_request.base.ref }}
