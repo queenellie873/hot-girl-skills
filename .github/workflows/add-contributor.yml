@@ -1,0 +1,76 @@
+name: add contributor
+
+# when a PR is merged, check if it was the author's first one.
+# if so, open a small PR that adds them to the contributors list in README.md.
+# main is protected, so this never pushes to main directly.
+
+on:
+  pull_request_target:
+    types: [closed]
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  add:
+    if: github.event.pull_request.merged == true && github.event.pull_request.user.type != 'Bot'
+    runs-on: ubuntu-latest
+    steps:
+      # base branch only. never check out or run the PR's code here.
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.base.ref }}
+
+      - name: add author to README if this is their first merged PR
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          REPO: ${{ github.repository }}
+          AUTHOR: ${{ github.event.pull_request.user.login }}
+          PR_NUMBER: ${{ github.event.pull_request.number }}
+          BASE: ${{ github.event.pull_request.base.ref }}
+        run: |
+          set -euo pipefail
+
+          # github logins are letters, numbers and dashes. anything else, stop.
+          if ! [[ "$AUTHOR" =~ ^[A-Za-z0-9-]+$ ]]; then
+            echo "unexpected login: $AUTHOR"; exit 1
+          fi
+
+          if grep -qi "](https://github.com/$AUTHOR)" README.md; then
+            echo "@$AUTHOR is already in the list"; exit 0
+          fi
+
+          # search can lag a few seconds behind the merge, so 0 counts as first too
+          merged=$(gh api -X GET search/issues \
+            -f q="repo:$REPO is:pr is:merged author:$AUTHOR" --jq .total_count)
+          if [ "$merged" -gt 1 ]; then
+            echo "@$AUTHOR has $merged merged PRs, not their first"; exit 0
+          fi
+
+          branch="contributors/add-$AUTHOR"
+          if [ -n "$(gh pr list --repo "$REPO" --head "$branch" --state open --json number --jq '.[]')" ]; then
+            echo "a PR for @$AUTHOR is already open"; exit 0
+          fi
+
+          # skills this PR added, e.g. "ask-for-help, cold-outreach-for-jobs"
+          skills=$(gh api --paginate "repos/$REPO/pulls/$PR_NUMBER/files" \
+            --jq '.[] | select(.status == "added") | .filename' \
+            | grep -E '^skills/[^/]+/SKILL\.md$' | cut -d/ -f2 | paste -sd, - | sed 's/,/, /g' || true)
+
+          line="- [@$AUTHOR](https://github.com/$AUTHOR)"
+          if [ -n "$skills" ]; then line="$line: $skills"; fi
+
+          grep -q '<!-- contributors:end -->' README.md || { echo "no contributors block in README.md"; exit 1; }
+          LINE="$line" awk '/<!-- contributors:end -->/ { print ENVIRON["LINE"] } { print }' README.md > README.tmp
+          mv README.tmp README.md
+
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git switch -c "$branch"
+          git commit -am "add @$AUTHOR to contributors"
+          git push origin "$branch"
+
+          gh pr create --repo "$REPO" --base "$BASE" --head "$branch" \
+            --title "add @$AUTHOR to contributors" \
+            --body "@$AUTHOR's first PR (#$PR_NUMBER) was merged, so this adds them to the contributors list in README.md. opened automatically by the add contributor workflow."
