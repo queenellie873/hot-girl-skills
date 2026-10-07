@@ -66,7 +66,12 @@ every skill author gets a spot here. thank u for making the agents smarter and h
   <img src="https://contrib.rocks/image?repo=queenellie873/hot-girl-skills" alt="contributors" />
 </a>
 
+<!-- contributors:start -->
 - [@queenellie873](https://github.com/queenellie873): agent-orchestrator, agent-messaging, code-explainer-but-i-have-adhd
+- [@talatise](https://github.com/talatise): ask-for-help, cold-outreach-for-jobs
+<!-- contributors:end -->
+
+// ur first merged PR adds u here automatically. a bot opens a tiny PR and we approve it.
 
 ## license
 
