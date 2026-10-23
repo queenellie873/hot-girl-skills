@@ -31,6 +31,7 @@ new to Claude Code? start with the [Claude Code onboarding guide](https://claude
 | [ask-for-help](skills/ask-for-help/) | rewrites a request for someone's time (feedback, review, intro, advice) so it's direct, specific and short. based on Josh Puckett's ["How to Ask for Help"](https://x.com/joshpuckett/status/2104249162556748029) |
 | [cold-outreach-for-jobs](skills/cold-outreach-for-jobs/) | writes a cold DM or email to someone at a company u want to work at: 2-4 sentences, one specific question, something small of value, and u apply first. based on [Diego Zaks' post](https://www.linkedin.com/posts/diegozaks_ive-received-countless-terrible-cold-outreach-share-7188176913150935040-ciC1/) |
 | [code-explainer-but-i-have-adhd](skills/code-explainer-but-i-have-adhd/) | explains code in small chunks: tl;dr first, one thing at a time, and a clear next step |
+| [conference-research](skills/conference-research/) | before a conference, finds which companies there are hiring for ur role and ranks the people u half-know at them, loosest useful ties first, with a source for every fact. based on the MIT and LinkedIn study ["A Causal Test of the Strength of Weak Ties"](https://news.mit.edu/2022/weak-ties-linkedin-employment-0915) |
 
 more in [`prompts/`](prompts/) (example `CLAUDE.md` files) and [`teams/`](teams/) (agent team setups).
 
