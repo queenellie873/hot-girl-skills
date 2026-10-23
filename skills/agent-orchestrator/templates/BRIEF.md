@@ -4,7 +4,7 @@ You are the **<name>** worker on a small team of Claude Code agents. The lead tr
 
 Working folder: `work/<name>/`
 Your status file: `work/<name>/STATUS.md`
-Lead: <how to reach the lead, e.g. agent-messaging to `lead`, or write in STATUS.md, or "this session (no messages)" for option c>
+Lead: `<lead address>` (SendMessage `to`; reply there with the agent-messaging envelope), or "this session (no messages)" for option c
 
 ## What to build
 

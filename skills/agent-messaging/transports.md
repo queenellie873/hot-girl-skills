@@ -1,13 +1,93 @@
 # Transports
 
 Details for each transport in [SKILL.md](SKILL.md). Try them in order; use the
-first that is available and reaches the recipient. Whatever you use, log the
+first that reaches the recipient. Whatever you use, log the
 send (SKILL.md section 3).
 
 In the commands below, `<ref>` is the recipient's surface and `<target>` is
 its tmux pane. Never copy a ref from an example: look it up.
 
-## a. cmux
+## a. SendMessage (default)
+
+Use this whenever the recipient is a Claude Code session on this machine or a
+subagent. It works across separate sessions, not just subagents, and nobody
+types into anyone's terminal.
+
+1. Run `ListAgents`. The first line is **your own address** ("This session is
+   <address>"). Every row below starts with another session's address, plus
+   whether it is busy or idle.
+2. Call SendMessage with that address as `to` and the one-line wire form as
+   `message`. Add ` [ref]` after the name only if `ListAgents` shows two rows
+   with the same name.
+3. The message arrives in the recipient's session on its own, wrapped as
+   `<cross-session-message from="<address>">`. To reply, send to that `from`.
+
+```
+SendMessage(to: "<worker address>", message: "[from: lead -> to: builder] [type: task] [id: lead-4] [re: -] Build the form from docs/form-spec.md. || reply: type done to lead via SendMessage")
+```
+
+Good to know:
+
+- **Give workers your address.** A worker started from a brief has never
+  received a message from you, so put your address in its brief or kickoff.
+  After that, it replies to the `from` of whatever you send.
+- **Waiting without polling.** Send with `notify_when_idle: true` (main
+  conversation only, sessions on this machine) to get one notice when the
+  recipient next goes idle or exits. You can send it with no `message` to
+  subscribe without interrupting. Never loop on `ListAgents` or send "are you
+  done?".
+- **Delivered is not read.** A session in a different permission mode may hold
+  your message for its human's approval, or let it expire. Never treat
+  silence as agreement.
+- **`@` paths don't attach anything.** Send the text itself.
+- If SendMessage or ListAgents is listed as a deferred tool, load it first
+  (for example with ToolSearch).
+
+## b. File inbox (when SendMessage can't reach them)
+
+Each agent has one inbox file in the shared project folder:
+
+```
+.agents/inbox/<agent>.md
+```
+
+Create `.agents/inbox/` if it does not exist. To send, append one entry, never
+overwrite:
+
+```
+- 2026-10-01 14:05 [from: designer -> to: lead] [type: question] [id: designer-2] [re: lead-3] Should the headlines mention the date or stay evergreen? || reply: answer "date" or "evergreen" with re: designer-2
+```
+
+Rules:
+
+- One entry per line, one-line wire form, always append. Nobody edits or
+  deletes lines in an inbox, not even its owner: rewriting the file while
+  someone else appends can lose a message.
+- The recipient reads its inbox at the start of each turn. An idle recipient
+  only gets there on its next turn, so tell the human if it is waiting.
+- To mark an entry handled, the recipient logs `handled <id>` in its own
+  `STATUS.md` (or `STATE.md`) log. Unhandled = ids in the inbox with no
+  `handled` line in your log. Match the whole id: `handled lead-1` does not
+  cover `lead-10`.
+
+Append from a shell with a quoted heredoc, so apostrophes, quotes and `$` in
+the message are safe:
+
+```sh
+mkdir -p .agents/inbox
+cat >> .agents/inbox/lead.md <<'EOF'
+- 2026-10-01 14:05 [from: designer -> to: lead] [type: question] [id: designer-2] [re: lead-3] Don't know the date yet: date or evergreen? || reply: answer with re: designer-2
+EOF
+```
+
+## c. cmux (backup only)
+
+Typing into a terminal interrupts whoever is typing in that tab, including
+the human, and can land in the middle of their message. Grey suggestion text
+also looks like typed input on screen. Use cmux or tmux to send only when
+SendMessage and the file inbox can't reach the recipient. cmux is still the
+right tool for opening, naming and reading tabs.
+
 
 cmux is a terminal multiplexer for agents. A window holds workspaces, a
 workspace holds panes, and a pane holds surfaces (terminal or browser tabs).
@@ -97,7 +177,9 @@ send as FAILED and use the file inbox. Do not retype or press Enter again.
 Always pass `--surface` explicitly. Without it, cmux targets
 `$CMUX_SURFACE_ID`, which is your own terminal.
 
-## b. tmux
+## d. tmux (backup only)
+
+Same warning as cmux: typing into a pane interrupts whoever is using it.
 
 Use when you are inside tmux (`$TMUX` is set) and the recipient runs in a tmux
 pane.
@@ -114,53 +196,3 @@ tmux send-keys -t <target> Enter
 when you create it so it can be found by title:
 `tmux select-pane -t <target> -T "<agent name>"`. The same screen-check and
 single-Enter rules as cmux apply. Use the one-line wire form.
-
-## c. Claude Code subagents (SendMessage)
-
-When the recipient is a subagent or teammate in the same Claude Code session,
-use the SendMessage tool with the recipient's name (or id) as `to` and the
-envelope as the message. The multi-line envelope is fine here. Their reply
-comes back to you as a notification; do not invent or predict it while waiting.
-
-If SendMessage is listed as a deferred tool, load it first (for example with
-ToolSearch) before calling it.
-
-## d. File inbox (fallback, always delivers)
-
-Each agent has one inbox file in the shared project folder:
-
-```
-.agents/inbox/<agent>.md
-```
-
-Create `.agents/inbox/` if it does not exist. To send, append one entry, never
-overwrite:
-
-```
-- 2026-10-01 14:05 [from: designer -> to: lead] [type: question] [id: designer-2] [re: lead-3] Should the headlines mention the date or stay evergreen? || reply: answer "date" or "evergreen" with re: designer-2
-```
-
-Rules:
-
-- One entry per line, one-line wire form, always append. Nobody edits or
-  deletes lines in an inbox, not even its owner: rewriting the file while
-  someone else appends can lose a message.
-- The recipient reads its inbox at the start of each turn. An idle recipient
-  only gets there on its next turn, so nudge it (below) if it is waiting.
-- To mark an entry handled, the recipient logs `handled <id>` in its own
-  `STATUS.md` (or `STATE.md`) log. Unhandled = ids in the inbox with no
-  `handled` line in your log. Match the whole id: `handled lead-1` does not
-  cover `lead-10`.
-- If the recipient is in a terminal you can see, you may also send a short
-  `fyi` nudge over cmux or tmux ("new message in your inbox, id designer-2"),
-  following the screen-check rules.
-
-Append from a shell with a quoted heredoc, so apostrophes, quotes and `$` in
-the message are safe:
-
-```sh
-mkdir -p .agents/inbox
-cat >> .agents/inbox/lead.md <<'EOF'
-- 2026-10-01 14:05 [from: designer -> to: lead] [type: question] [id: designer-2] [re: lead-3] Don't know the date yet: date or evergreen? || reply: answer with re: designer-2
-EOF
-```
