@@ -68,6 +68,10 @@ every skill author gets a spot here. thank u for making the agents smarter and h
 </a>
 
 - [@queenellie873](https://github.com/queenellie873): agent-orchestrator, agent-messaging, code-explainer-but-i-have-adhd
+- [@talatise](https://github.com/talatise): ask-for-help, cold-outreach-for-jobs
+- [@isleDeli](https://github.com/isleDeli): conference-research
+
+// after ur first merged PR, a maintainer adds u here.
 
 ## license
 
